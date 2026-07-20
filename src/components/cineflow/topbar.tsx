@@ -7,8 +7,8 @@ export function TopBar() {
   const [dark, setDark] = useState(true);
   useEffect(() => {
     const root = document.documentElement;
-    if (dark) root.classList.add("dark");
-    else root.classList.remove("dark");
+    if (dark) root.classList.remove("light");
+    else root.classList.add("light");
   }, [dark]);
   return (
     <header className="sticky top-0 z-40 glass border-b border-white/5">
