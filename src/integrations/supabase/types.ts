@@ -14,7 +14,272 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      ai_conversations: {
+        Row: {
+          agent: string
+          content: string
+          created_at: string
+          id: string
+          metadata: Json
+          project_id: string | null
+          role: string
+          user_id: string
+        }
+        Insert: {
+          agent: string
+          content: string
+          created_at?: string
+          id?: string
+          metadata?: Json
+          project_id?: string | null
+          role: string
+          user_id: string
+        }
+        Update: {
+          agent?: string
+          content?: string
+          created_at?: string
+          id?: string
+          metadata?: Json
+          project_id?: string | null
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_conversations_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "movie_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      movie_projects: {
+        Row: {
+          audience: string | null
+          budget: string | null
+          country: string | null
+          created_at: string
+          duration: string | null
+          genre: string | null
+          id: string
+          idea: string
+          language: string | null
+          metadata: Json
+          status: string
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          audience?: string | null
+          budget?: string | null
+          country?: string | null
+          created_at?: string
+          duration?: string | null
+          genre?: string | null
+          id?: string
+          idea: string
+          language?: string | null
+          metadata?: Json
+          status?: string
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          audience?: string | null
+          budget?: string | null
+          country?: string | null
+          created_at?: string
+          duration?: string | null
+          genre?: string | null
+          id?: string
+          idea?: string
+          language?: string | null
+          metadata?: Json
+          status?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      production_plans: {
+        Row: {
+          created_at: string
+          department: string
+          id: string
+          plan: Json
+          project_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          department: string
+          id?: string
+          plan?: Json
+          project_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          department?: string
+          id?: string
+          plan?: Json
+          project_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "production_plans_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "movie_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          email: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      scripts: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          project_id: string
+          title: string | null
+          updated_at: string
+          user_id: string
+          version: number
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          project_id: string
+          title?: string | null
+          updated_at?: string
+          user_id: string
+          version?: number
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          project_id?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scripts_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "movie_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      uploaded_files: {
+        Row: {
+          created_at: string
+          file_name: string
+          id: string
+          mime_type: string | null
+          project_id: string | null
+          size_bytes: number | null
+          storage_path: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          id?: string
+          mime_type?: string | null
+          project_id?: string | null
+          size_bytes?: number | null
+          storage_path: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          id?: string
+          mime_type?: string | null
+          project_id?: string | null
+          size_bytes?: number | null
+          storage_path?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "uploaded_files_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "movie_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_settings: {
+        Row: {
+          created_at: string
+          default_language: string
+          preferences: Json
+          theme: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          default_language?: string
+          preferences?: Json
+          theme?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          default_language?: string
+          preferences?: Json
+          theme?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
