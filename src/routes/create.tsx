@@ -87,7 +87,7 @@ function CreatePage() {
             </div>
 
             <Field label="Movie idea" icon={Film} htmlFor="idea">
-              <Textarea id="idea" required placeholder="A rogue AI archaeologist discovers a lost cinema on Mars..." rows={4} className="bg-black/40 border-white/10 focus-visible:ring-brand" />
+              <Textarea id="idea" name="idea" required placeholder="A rogue AI archaeologist discovers a lost cinema on Mars..." rows={4} className="bg-black/40 border-white/10 focus-visible:ring-brand" />
             </Field>
 
             <div className="grid gap-6 sm:grid-cols-2">
