@@ -1,4 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/use-auth";
 import {
   ArrowRight, Clapperboard, Film, Globe, Users, DollarSign, Clock, MapPin, Languages,
 } from "lucide-react";
@@ -23,9 +27,40 @@ const genres = ["Action", "Drama", "Sci-Fi", "Comedy", "Thriller", "Romance", "H
 
 function CreatePage() {
   const navigate = useNavigate();
-  const handleSubmit = (e: React.FormEvent) => {
+  const { user } = useAuth();
+  const [saving, setSaving] = useState(false);
+  const [genre, setGenre] = useState<string>("");
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    navigate({ to: "/processing" });
+    if (!user) {
+      toast.error("Please sign in to start a production.");
+      navigate({ to: "/auth" });
+      return;
+    }
+    const form = e.currentTarget as HTMLFormElement;
+    const fd = new FormData(form);
+    const idea = String(fd.get("idea") ?? "").trim();
+    if (!idea) return;
+    setSaving(true);
+    const { data, error } = await supabase.from("movie_projects").insert({
+      user_id: user.id,
+      idea,
+      title: idea.slice(0, 80),
+      genre: genre || null,
+      audience: String(fd.get("audience") ?? "") || null,
+      language: String(fd.get("language") ?? "") || null,
+      budget: String(fd.get("budget") ?? "") || null,
+      duration: String(fd.get("duration") ?? "") || null,
+      country: String(fd.get("country") ?? "") || null,
+      status: "processing",
+    }).select("id").single();
+    setSaving(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("Production briefed. Rolling cameras…");
+    navigate({ to: "/processing", search: { projectId: data.id } as any });
   };
   return (
     <div className="min-h-screen relative">
@@ -57,25 +92,25 @@ function CreatePage() {
 
             <div className="grid gap-6 sm:grid-cols-2">
               <Field label="Genre" icon={Clapperboard} htmlFor="genre">
-                <Select>
+                <Select value={genre} onValueChange={setGenre}>
                   <SelectTrigger id="genre" className="bg-black/40 border-white/10"><SelectValue placeholder="Select genre" /></SelectTrigger>
                   <SelectContent>{genres.map((g) => <SelectItem key={g} value={g}>{g}</SelectItem>)}</SelectContent>
                 </Select>
               </Field>
               <Field label="Target audience" icon={Users} htmlFor="audience">
-                <Input id="audience" placeholder="e.g. Adults 18-45" className="bg-black/40 border-white/10" />
+                <Input id="audience" name="audience" placeholder="e.g. Adults 18-45" className="bg-black/40 border-white/10" />
               </Field>
               <Field label="Language" icon={Languages} htmlFor="language">
-                <Input id="language" placeholder="English" className="bg-black/40 border-white/10" />
+                <Input id="language" name="language" placeholder="English" className="bg-black/40 border-white/10" />
               </Field>
               <Field label="Estimated budget" icon={DollarSign} htmlFor="budget">
-                <Input id="budget" placeholder="$5,000,000" className="bg-black/40 border-white/10" />
+                <Input id="budget" name="budget" placeholder="$5,000,000" className="bg-black/40 border-white/10" />
               </Field>
               <Field label="Movie duration" icon={Clock} htmlFor="duration">
-                <Input id="duration" placeholder="120 minutes" className="bg-black/40 border-white/10" />
+                <Input id="duration" name="duration" placeholder="120 minutes" className="bg-black/40 border-white/10" />
               </Field>
               <Field label="Country" icon={Globe} htmlFor="country">
-                <Input id="country" placeholder="United States" className="bg-black/40 border-white/10" />
+                <Input id="country" name="country" placeholder="United States" className="bg-black/40 border-white/10" />
               </Field>
             </div>
 
@@ -85,8 +120,8 @@ function CreatePage() {
 
             <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
               <Button asChild variant="ghost" className="text-white/70 hover:text-white"><Link to="/">Back to lobby</Link></Button>
-              <Button type="submit" size="lg" className="btn-glow bg-gradient-to-r from-brand to-brand-glow text-brand-foreground hover:opacity-90 rounded-full px-7 cinema-heading tracking-widest">
-                Roll Camera <ArrowRight className="ml-2 h-4 w-4" />
+              <Button type="submit" size="lg" disabled={saving} className="btn-glow bg-gradient-to-r from-brand to-brand-glow text-brand-foreground hover:opacity-90 rounded-full px-7 cinema-heading tracking-widest">
+                {saving ? "Saving…" : "Roll Camera"} <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
           </div>
