@@ -16,7 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { chatWithAgent, getProjectBundle } from "@/lib/ai.functions";
 
-export const Route = createFileRoute("/project/")({
+export const Route = createFileRoute("/project/$projectId")({
   head: () => ({ meta: [{ title: "Production · CineFlow AI" }] }),
   component: ProjectPage,
 });
