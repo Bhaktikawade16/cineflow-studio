@@ -247,6 +247,134 @@
 .animate-soundwave  { animation: soundwave 1s ease-in-out infinite; }
 .animate-caret      { animation: caret-blink 1s steps(2) infinite; }
 
+/* ================= Premium cinematic polish ================= */
+@keyframes cf-fade-up {
+  from { opacity: 0; transform: translate3d(0, 16px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes cf-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes cf-scale-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes cf-slide-right {
+  from { opacity: 0; transform: translate3d(-14px, 0, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes cf-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes cf-typing {
+  0%, 20%   { transform: translateY(0); opacity: 0.35; }
+  40%       { transform: translateY(-4px); opacity: 1; }
+  60%, 100% { transform: translateY(0); opacity: 0.35; }
+}
+@keyframes cf-float-particle {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  10%  { opacity: 0.7; }
+  100% { transform: translate3d(var(--px, 20px), -110vh, 0); opacity: 0; }
+}
+@keyframes cf-glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--brand) 45%, transparent); }
+  50%      { box-shadow: 0 0 28px 4px color-mix(in oklab, var(--brand) 35%, transparent); }
+}
+
+.animate-fade-up   { animation: cf-fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-fade-in   { animation: cf-fade-in 0.5s ease-out both; }
+.animate-scale-in  { animation: cf-scale-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-slide-right { animation: cf-slide-right 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* Staggered children — apply to a parent, children animate in sequence */
+.stagger > *      { animation: cf-fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.stagger > *:nth-child(1)  { animation-delay: 0.04s; }
+.stagger > *:nth-child(2)  { animation-delay: 0.10s; }
+.stagger > *:nth-child(3)  { animation-delay: 0.16s; }
+.stagger > *:nth-child(4)  { animation-delay: 0.22s; }
+.stagger > *:nth-child(5)  { animation-delay: 0.28s; }
+.stagger > *:nth-child(6)  { animation-delay: 0.34s; }
+.stagger > *:nth-child(7)  { animation-delay: 0.40s; }
+.stagger > *:nth-child(8)  { animation-delay: 0.46s; }
+.stagger > *:nth-child(9)  { animation-delay: 0.52s; }
+.stagger > *:nth-child(10) { animation-delay: 0.58s; }
+.stagger > *:nth-child(n+11) { animation-delay: 0.64s; }
+
+/* Page transition wrapper */
+.page-transition { animation: cf-fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; will-change: transform, opacity; }
+
+/* Skeleton shimmer */
+@utility skeleton-shimmer {
+  background: linear-gradient(90deg,
+    color-mix(in oklab, #fff 4%, transparent) 0%,
+    color-mix(in oklab, var(--brand) 14%, transparent) 50%,
+    color-mix(in oklab, #fff 4%, transparent) 100%);
+  background-size: 200% 100%;
+  animation: cf-shimmer 1.6s linear infinite;
+  border-radius: 0.75rem;
+}
+
+/* Glow hover — layer on cards, buttons, tabs */
+@utility glow-hover {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.35s ease,
+              border-color 0.35s ease;
+  will-change: transform;
+}
+.glow-hover:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 18px 60px -24px color-mix(in oklab, var(--brand) 55%, transparent),
+    0 0 0 1px color-mix(in oklab, var(--brand-glow) 30%, transparent);
+}
+
+/* Typing indicator dots */
+.cf-typing-dot {
+  display: inline-block;
+  width: 6px; height: 6px; margin: 0 2px;
+  border-radius: 9999px;
+  background: var(--brand-glow);
+  animation: cf-typing 1.2s ease-in-out infinite;
+}
+.cf-typing-dot:nth-child(2) { animation-delay: 0.15s; }
+.cf-typing-dot:nth-child(3) { animation-delay: 0.3s; }
+
+/* Floating cinematic particles (dust motes) */
+.cf-particles {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.cf-particles span {
+  position: absolute;
+  bottom: -10px;
+  width: 3px; height: 3px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, color-mix(in oklab, var(--gold) 80%, transparent), transparent 70%);
+  filter: blur(0.5px);
+  animation: cf-float-particle var(--dur, 18s) linear infinite;
+  animation-delay: var(--delay, 0s);
+  left: var(--x, 20%);
+  opacity: 0;
+}
+
+/* Soft neon pulse for hero CTAs */
+.animate-neon-pulse { animation: cf-glow-pulse 3.2s ease-in-out infinite; }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .cf-particles { display: none; }
+}
+
 .animated-border {
   background:
     linear-gradient(#0f0f0f,#0f0f0f) padding-box,
