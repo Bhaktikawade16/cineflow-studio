@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider } from "@/hooks/use-auth";
 import { Toaster } from "sonner";
+import { ParticleField } from "@/components/cineflow/particles";
 
 function NotFoundComponent() {
   return (
@@ -121,13 +122,28 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+  const pathname = router.state.location.pathname;
 
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+        <ParticleField />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-        <Toaster theme="dark" position="top-right" richColors />
+        <div key={pathname} className="page-transition relative z-[1]">
+          <Outlet />
+        </div>
+        <Toaster
+          theme="dark"
+          position="top-right"
+          richColors
+          closeButton
+          toastOptions={{
+            classNames: {
+              toast: "animate-scale-in backdrop-blur-xl border border-white/10",
+            },
+          }}
+        />
       </AuthProvider>
     </QueryClientProvider>
   );
