@@ -115,7 +115,7 @@ function Processing() {
           </div>
         </div>
 
-        <div className="relative pl-10">
+        <div className="relative pl-10 stagger">
           <div className="absolute left-4 top-2 bottom-2 w-px bg-gradient-to-b from-brand via-gold to-cinema-red opacity-60" />
 
           <div className="space-y-4">
@@ -146,7 +146,7 @@ function Processing() {
 
                   <div
                     className={`glass rounded-2xl p-4 sm:p-5 border ${
-                      active ? "border-brand/40" : isDone ? "border-white/10" : "border-white/5"
+                      active ? "border-brand/40 animate-neon-pulse" : isDone ? "border-white/10" : "border-white/5"
                     }`}
                   >
                     <div className="flex items-center justify-between gap-3">
@@ -165,11 +165,24 @@ function Processing() {
                         </div>
                       </div>
                       <span
-                        className={`shrink-0 text-[10px] tracking-[0.25em] uppercase ${
+                        className={`shrink-0 text-[10px] tracking-[0.25em] uppercase flex items-center gap-1.5 ${
                           isDone ? "text-gold" : active ? accentText[a.accent] : "text-white/40"
                         }`}
                       >
-                        {isDone ? "✓ Complete" : active ? `${progress}%` : "Queued"}
+                        {isDone ? (
+                          "✓ Complete"
+                        ) : active ? (
+                          <>
+                            <span className="inline-flex">
+                              <span className="cf-typing-dot" />
+                              <span className="cf-typing-dot" />
+                              <span className="cf-typing-dot" />
+                            </span>
+                            {progress}%
+                          </>
+                        ) : (
+                          "Queued"
+                        )}
                       </span>
                     </div>
 

@@ -92,7 +92,7 @@ function ProjectPage() {
         </div>
 
         <Tabs defaultValue="overview" className="space-y-4">
-          <TabsList className="bg-black/60 border border-white/10">
+          <TabsList className="bg-black/60 border border-white/10 animate-fade-in">
             <TabsTrigger value="overview"><FileText className="h-3.5 w-3.5 mr-1" />Overview</TabsTrigger>
             <TabsTrigger value="script"><PenLine className="h-3.5 w-3.5 mr-1" />Script</TabsTrigger>
             <TabsTrigger value="plan"><CalendarClock className="h-3.5 w-3.5 mr-1" />Plan</TabsTrigger>
@@ -101,7 +101,7 @@ function ProjectPage() {
             <TabsTrigger value="files"><Upload className="h-3.5 w-3.5 mr-1" />Files</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview">
+          <TabsContent value="overview" className="animate-fade-up">
             {bundle.isLoading ? (
               <div className="grid gap-4 md:grid-cols-2">
                 <Skeleton className="h-64" />
@@ -150,7 +150,7 @@ function ProjectPage() {
             )}
           </TabsContent>
 
-          <TabsContent value="script">
+          <TabsContent value="script" className="animate-fade-up">
             <Panel title={script?.title ?? "Screenplay"}>
               {bundle.isLoading ? <Skeleton className="h-96" /> : (
                 <pre className="whitespace-pre-wrap rounded-2xl bg-black/60 border border-white/10 p-4 text-xs font-mono text-white/85 max-h-[70vh] overflow-auto">
@@ -160,7 +160,7 @@ function ProjectPage() {
             </Panel>
           </TabsContent>
 
-          <TabsContent value="plan">
+          <TabsContent value="plan" className="animate-fade-up">
             <Panel title="Production Plan">
               {(masterPlan?.phases ?? []).map((p: any, i: number) => (
                 <div key={i} className="mb-4 rounded-xl border border-white/10 bg-black/40 p-4">
@@ -191,7 +191,7 @@ function ProjectPage() {
             </Panel>
           </TabsContent>
 
-          <TabsContent value="budget">
+          <TabsContent value="budget" className="animate-fade-up">
             <Panel title={`Budget${budgetPlan?.total ? ` · ${budgetPlan.total}` : ""}`}>
               <div className="overflow-x-auto rounded-2xl border border-white/10">
                 <table className="w-full text-sm">
@@ -217,11 +217,11 @@ function ProjectPage() {
             </Panel>
           </TabsContent>
 
-          <TabsContent value="chat">
+          <TabsContent value="chat" className="animate-fade-up">
             <AgentChat projectId={projectId} onSaved={() => qc.invalidateQueries({ queryKey: ["project", projectId] })} />
           </TabsContent>
 
-          <TabsContent value="files">
+          <TabsContent value="files" className="animate-fade-up">
             <FilesPanel projectId={projectId} files={files} onChange={() => qc.invalidateQueries({ queryKey: ["project", projectId] })} />
           </TabsContent>
         </Tabs>
@@ -309,7 +309,7 @@ function AgentChat({ projectId, onSaved }: { projectId: string; onSaved: () => v
           {(messagesQuery.data ?? []).map((m) => (
             <div
               key={m.id}
-              className={`max-w-[85%] rounded-2xl p-3 text-sm whitespace-pre-wrap ${
+              className={`max-w-[85%] rounded-2xl p-3 text-sm whitespace-pre-wrap animate-scale-in ${
                 m.role === "user"
                   ? "ml-auto bg-brand/20 border border-brand/30 text-white"
                   : "bg-black/40 border border-white/10 text-white/85"
@@ -319,18 +319,23 @@ function AgentChat({ projectId, onSaved }: { projectId: string; onSaved: () => v
             </div>
           ))}
           {send.isPending && (
-            <div className="flex items-center gap-2 text-xs text-white/50">
-              <Loader2 className="h-3 w-3 animate-spin" /> Thinking…
+            <div className="flex items-center gap-2 text-xs text-brand-glow animate-fade-in">
+              <span className="inline-flex">
+                <span className="cf-typing-dot" />
+                <span className="cf-typing-dot" />
+                <span className="cf-typing-dot" />
+              </span>
+              Thinking…
             </div>
           )}
         </div>
         <div className="border-t border-white/10 p-3 space-y-2">
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-1.5 stagger">
             {QUICK_PROMPTS.map((p) => (
               <button
                 key={p}
                 onClick={() => setInput(p)}
-                className="text-[11px] rounded-full border border-white/10 bg-black/40 px-2.5 py-1 text-white/70 hover:border-gold/30 hover:text-gold"
+                className="text-[11px] rounded-full border border-white/10 bg-black/40 px-2.5 py-1 text-white/70 hover:border-gold/30 hover:text-gold transition-all hover:scale-105"
               >
                 {p}
               </button>
