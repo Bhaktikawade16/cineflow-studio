@@ -63,8 +63,10 @@ function Dashboard() {
           </p>
 
           {projects.isLoading && (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {[0, 1, 2].map((i) => <Skeleton key={i} className="h-40 rounded-2xl" />)}
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 stagger">
+              {[0, 1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="skeleton-shimmer h-40 rounded-2xl" />
+              ))}
             </div>
           )}
 
@@ -88,7 +90,7 @@ function Dashboard() {
             </div>
           )}
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 stagger">
             {(projects.data ?? []).map((p: any) => {
               const meta = (p.metadata ?? {}) as any;
               return (
@@ -96,7 +98,7 @@ function Dashboard() {
                   key={p.id}
                   to="/project/$projectId"
                   params={{ projectId: p.id }}
-                  className="group glass rounded-2xl border border-white/10 p-5 hover:border-brand/40 hover:-translate-y-1 transition-all"
+                  className="group glass glow-hover rounded-2xl border border-white/10 p-5"
                 >
                   <div className="flex items-center justify-between">
                     <Badge className="bg-brand/15 text-brand-glow border border-brand/25 tracking-widest uppercase text-[10px]">
@@ -125,11 +127,11 @@ function Dashboard() {
           </div>
         </section>
 
-        <section className="glass rounded-2xl border border-white/10 p-5">
+        <section className="glass rounded-2xl border border-white/10 p-5 animate-fade-up">
           <p className="text-[10px] tracking-[0.3em] uppercase text-gold/80 mb-3 flex items-center gap-2">
             <Film className="h-3.5 w-3.5" /> Meet Your Departments
           </p>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5 stagger">
             {[
               { n: "Director", d: "Vision, tone, performance" },
               { n: "Script Writer", d: "Dialogue, structure" },
@@ -137,7 +139,7 @@ function Dashboard() {
               { n: "Budget Planner", d: "Line items & tradeoffs" },
               { n: "Storyboard", d: "Shot lists & framing" },
             ].map((a) => (
-              <div key={a.n} className="rounded-xl border border-white/10 bg-black/40 p-3">
+              <div key={a.n} className="rounded-xl border border-white/10 bg-black/40 p-3 glow-hover">
                 <p className="text-sm font-semibold text-white">{a.n}</p>
                 <p className="text-xs text-white/60 mt-1">{a.d}</p>
               </div>
